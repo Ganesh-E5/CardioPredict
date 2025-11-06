@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environments
+venv/
+.env
+
+# Data and models
+Datasets/
+models/
+
+# Node
+node_modules/
+dist/
+.build/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# GitHub Actions artifacts
+coverage/
