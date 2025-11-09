@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-
+import { Helmet } from "react-helmet";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ResultPage = () => {
@@ -40,7 +40,10 @@ const ResultPage = () => {
   const factorCardBg = "bg-[rgba(0,0,0,0.75)]"; 
 
   return (
-    // KEEPING ORIGINAL PAGE GRADIENT
+    <>
+    <Helmet>
+      <title>CardioPredict | Result</title>
+    </Helmet>
     <div className="min-h-screen bg-linear-to-br from-[#0f1419] via-[#1a1f2e] to-[#0d1117] flex justify-center py-10 px-4">
       <div className="w-full max-w-5xl space-y-6">
 
@@ -129,6 +132,7 @@ const ResultPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

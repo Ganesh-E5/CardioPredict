@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { AiFillHeart } from "react-icons/ai";
 
 export default function Navbar() {
   const location = useLocation();
@@ -66,9 +67,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
         {/* Logo */}
         <div
-          className="text-2xl font-bold text-blue-400 cursor-pointer"
+          className="text-2xl font-bold text-blue-400 cursor-pointer flex justify-between gap-3"
           onClick={() => handleClick({ id: "hero", path: "/" })}
         >
+           <AiFillHeart className="text-cyan-400" size={35} />
           CardioPredict
         </div>
 
