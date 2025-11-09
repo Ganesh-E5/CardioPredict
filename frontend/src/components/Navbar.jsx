@@ -1,53 +1,94 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Navbar() {
-  const [activeSection, setActiveSection] = useState("hero");
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState(
+    location.pathname === "/predict" || location.pathname === "/result" ? "predict" : "hero"
+  );
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const sections = ["hero", "about", "features", "how", "testimonials", "cta"];
+  // Links
+  const homeLinks = [
+    { id: "hero", label: "Home", path: "/" },
+    { id: "about", label: "About", path: "/" },
+    { id: "features", label: "Features", path: "/" },
+    { id: "how", label: "How", path: "/" },
+    { id: "testimonials", label: "Testimonials", path: "/" },
+    { id: "cta", label: "CTA", path: "/" },
+    { id: "predict", label: "Predict", path: "/predict", highlight: true },
+  ];
 
-  // Scroll listener to detect active section
+  const predictResultLinks = [
+    { id: "home", label: "Home", path: "/" },
+    { id: "predict", label: "Predict", path: "/predict" },
+  ];
+
+  const links =
+    location.pathname === "/"
+      ? homeLinks
+      : predictResultLinks; // /predict or /result
+
+  // Scroll listener for HomePage sections
   useEffect(() => {
+    if (location.pathname !== "/") return;
+
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 80; // offset for sticky navbar
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
+      const scrollPos = window.scrollY + 80;
+      for (let i = links.length - 1; i >= 0; i--) {
+        if (links[i].path !== "/") continue;
+        const el = document.getElementById(links[i].id);
         if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(sections[i]);
+          setActiveLink(links[i].id);
           break;
         }
       }
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location.pathname]);
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMenuOpen(false); // close menu on mobile after click
+  const handleClick = (link) => {
+    setMenuOpen(false);
+    setActiveLink(link.id);
+
+    if (location.pathname !== link.path) {
+      window.location.href = link.path;
+    } else if (link.path === "/") {
+      const el = document.getElementById(link.id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-[#161b22]/95 backdrop-blur-md shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
         {/* Logo */}
-        <div className="text-2xl font-bold text-blue-400 cursor-pointer" onClick={() => scrollToSection("hero")}>
+        <div
+          className="text-2xl font-bold text-blue-400 cursor-pointer"
+          onClick={() => handleClick({ id: "hero", path: "/" })}
+        >
           CardioPredict
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6 text-gray-400 text-sm md:text-base relative">
-          {sections.slice(1).map((section) => (
+        <div className="hidden md:flex space-x-4 text-sm md:text-base relative">
+          {links.map((link) => (
             <button
-              key={section}
-              onClick={() => scrollToSection(section)}
-              className="relative px-1 py-2 font-medium hover:text-blue-400 transition"
+              key={link.id}
+              onClick={() => handleClick(link)}
+              className={`relative px-3 py-2 font-medium transition-all rounded ${
+                location.pathname === "/" && link.highlight
+                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                  : activeLink === link.id
+                  ? "text-blue-400"
+                  : "text-gray-400 hover:text-blue-400"
+              }`}
             >
-              {section.charAt(0).toUpperCase() + section.slice(1)}
-              {activeSection === section && (
-                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-400 rounded-full transition-all duration-300" />
+              {link.label}
+              {activeLink === link.id && !(location.pathname === "/" && link.highlight) && (
+                <span className="absolute left-1/2 transform -translate-x-1/2 bottom-0 w-2/3 h-0.5 bg-blue-400 rounded-full transition-all" />
               )}
             </button>
           ))}
@@ -66,15 +107,19 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="absolute top-full left-0 w-full bg-[#161b22] border-t border-[#30363d] md:hidden flex flex-col items-center py-4 space-y-4">
-            {sections.slice(1).map((section) => (
+            {links.map((link) => (
               <button
-                key={section}
-                onClick={() => scrollToSection(section)}
-                className={`font-medium text-lg hover:text-blue-400 ${
-                  activeSection === section ? "text-blue-400" : "text-gray-400"
+                key={link.id}
+                onClick={() => handleClick(link)}
+                className={`font-medium text-lg rounded px-3 py-2 w-3/4 text-center transition-all ${
+                  location.pathname === "/" && link.highlight
+                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                    : activeLink === link.id
+                    ? "text-blue-400"
+                    : "text-gray-400 hover:text-blue-400"
                 }`}
               >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
+                {link.label}
               </button>
             ))}
           </div>

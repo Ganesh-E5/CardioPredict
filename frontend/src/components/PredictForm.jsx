@@ -42,7 +42,7 @@ function PredictForm() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#0f1419] via-[#1a1f2e] to-[#0d1117] text-[#e6edf3] flex justify-center items-start py-10 px-4">
+    <div className="min-h-screen bg-linear-to-br from-[#0f1419] via-[#1a1f2e] to-[#0d1117] text-[#e6edf3] flex justify-center items-start py-10 px-4 mt-10">
       <div className="w-full max-w-4xl space-y-8 animate-fadeIn">
         {/* Header */}
         <div className="bg-[#161b22] border border-[#30363d] shadow-xl rounded-2xl p-8 text-center">
