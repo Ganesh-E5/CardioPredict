@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import AppLayout from "./AppLayout.jsx";
+import HomePage from "./pages/HomePage.jsx";
 import PredictPage from "./pages/PredictPage.jsx";
 import ResultPage from "./pages/ResultPage.jsx";
 import "./index.css";
@@ -14,7 +15,8 @@ const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { path: "/", element: <PredictPage /> },
+      { path: "/", element: <HomePage /> },
+      { path:"/predict",element:<PredictPage/>},
       { path: "/result", element: <ResultPage /> },
     ],
   },
