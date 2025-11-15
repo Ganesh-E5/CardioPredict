@@ -25,6 +25,33 @@ const ResultPage = () => {
     ],
   };
 
+  const prob = Number(result?.probability ?? 0);  // ensures number
+  const risk = Number((prob * 100).toFixed(2));   // converts to number safely
+  const safe = Number((100 - risk).toFixed(2));   // opposite value
+
+  const chartData1 = {
+    labels: ["Risk Chances", "Safe Chances"],
+    datasets: [
+      {
+      data: [risk, safe],
+      backgroundColor: ["#FF6B6B", "#4ECDC4"],
+      hoverBackgroundColor: ["#FF4C4C", "#3CC7BD"],
+    },
+    ],
+  };
+  const chartOptions = {
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          // Tooltip looks like "Risk 25%"
+          return `${context.label} ${context.raw}%`;
+        },
+      },
+    },
+  },
+};
+
   // Filter factors (remove age, gender, height)
   const filteredHealthyFactors = (result.healthy_factors || []).filter(
     f => !["Age", "Gender", "Height"].includes(f.factor)
@@ -68,9 +95,19 @@ const ResultPage = () => {
           </div>
 
           {/* Doughnut Chart */}
-          <div className={`max-w-sm mx-auto p-4 rounded-xl`} >
-            <Doughnut data={chartData} />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+  {/* Healthy vs Unhealthy Chart */}
+  <div className="max-w-sm mx-auto p-4 rounded-xl">
+    <Doughnut data={chartData} />
+  </div>
+
+  {/* Risk vs Safe Chart */}
+  <div className="max-w-sm mx-auto p-4 rounded-xl">
+    <Doughnut data={chartData1} options={chartOptions} />
+  </div>
+
+</div>
         </div>
 
         {/* Personal Info - Uses mainCardBg (near-black 85% opacity) */}

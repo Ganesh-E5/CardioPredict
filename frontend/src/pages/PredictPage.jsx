@@ -6,6 +6,6 @@ export default function PredictPage() {
   <Helmet>
     <title>CardioPredict | Predict</title>
   </Helmet>
-  <PredictForm />;
+  <PredictForm />
   </>
 }
